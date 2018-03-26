@@ -22,13 +22,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\TesteDotNetCausaOnline.Domain.Services\TesteDotNetCausaOnline.Domain.Services.csproj" />
     <ProjectReference Include="..\TesteDotNetCausaOnline.Domain\TesteDotNetCausaOnline.Domain.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\Pages\" />
     <Folder Include="Data\Repositories\" />
-    <Folder Include="Validations\" />
+    <Folder Include="wwwroot\lib\" />
   </ItemGroup>
 
 </Project>

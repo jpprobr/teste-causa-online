@@ -1,0 +1,70 @@
+﻿<div class="row">
+    <div class="col-md-12">
+
+        <!--Header-->
+        <section class="page-header">
+            <h2>Chamados</h2>
+            <p class="text-right"><span class="label label-success">{{vm.infoUser}}</span></p>
+        </section>
+
+        <!--Info-->
+        <section id="Info" class="text-center">
+            <div class="well text-danger" ng-show="vm.errorMessage"><i class="fa fa-warning"></i> {{ vm.errorMessage }}</div>
+            <load-cursor ng-show="vm.isLoading"></load-cursor>
+        </section>
+
+
+        <!--Tabela-->
+        <table class="table table-responsive table-striped">
+            <tr>
+                <th>Nº Processo</th>
+                <th>Título</th>
+                <th>Urgência</th>
+                <th>Categoria</th>
+                <th>Opções</th>
+            </tr>
+            <tr ng-repeat="item in vm.itens">
+                <td>{{ item.numeroProcesso }}</td>
+                <td>{{ item.titulo }}</td>
+                <td>{{ item.prioridade.descricao }}</td>
+                <td>{{ item.categoria.descricao }}</td>
+                <td>
+                    <!--Exibir-->
+                    <a ng-href="#!/exibir/{{item.numeroProcesso}}" class="btn btn-sm btn-default" data-loading-text="Aguarde..." title="Exibir detalhes">
+                        <span class="glyphicon glyphicon-eye-open"></span>
+                    </a>
+
+                    <!--Editar-->
+                    <a ng-href="#!/editar/{{item.numeroProcesso}}" class="btn btn-sm btn-primary" data-loading-text="Aguarde..." title="Editar">
+                        <span class="glyphicon glyphicon-edit"></span>
+                    </a>
+
+                    <!--Excluir-->
+                    <button type="button" class="btn btn-sm btn-danger" ng-click="vm.excluir(item)" title="Excluir"
+                            data-loading-text="Aguarde...">
+                        <span class="glyphicon glyphicon-trash"></span>
+                    </button>
+                </td>
+            </tr>
+            <tr ng-show="(!vm.itens || vm.itens.length <= 0)">
+                <td colspan="5" class="text-center">Nenhum chamado encontrado</td>
+            </tr>
+            <tfooter>
+                <tr>
+                    <td colspan="5">Qtde registros: {{vm.itens.length}}</td>
+                </tr>
+            </tfooter>
+        </table>
+
+        <!--Opções-->
+        <section id="opcoes">
+            <p>
+                <!--Novo-->
+                <a ng-href="#!/cadastrar" class="btn btn-primary">
+                    <i class="fa fa-plus fa-lg"></i> Novo
+                </a>
+            </p>
+        </section>
+
+    </div>
+</div>

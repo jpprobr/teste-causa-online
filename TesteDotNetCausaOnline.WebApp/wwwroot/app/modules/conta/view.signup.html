@@ -1,0 +1,88 @@
+﻿
+<!--Header-->
+<div class="page-header">
+    <h3>{{vm.titulo}}<small> - {{vm.subtitulo}}</small></h3>
+</div>
+
+<div class="col-md-12">
+
+    <!--Info-->
+    <section id="Info" class="text-center">
+        <div class="well text-danger" ng-show="vm.errorMessage"><i class="fa fa-warning"></i> {{ vm.errorMessage }}</div>
+        <load-cursor ng-show="vm.isLoading"></load-cursor>
+    </section>
+
+    <!--Form-->
+    <form name="formItem" novalidate ng-submit="vm.salvar()">
+        <div class="form-horizontal">
+
+            <!--Login/E-mail-->
+            <div class="form-group" ng-class="{
+                'has-warning': formItem.Email.$touched && formItem.Email.$error.required,
+                'has-error': formItem.Email.$dirty && formItem.Email.$invalid,
+                'has-success': formItem.Email.$dirty && !formItem.Email.$invalid}">
+                <label for="email" class="col-md-2 control-label">E-mail (Login): *</label>
+
+                <div class="col-md-4">
+                    <input type="text" class="form-control" id="email" name="email" ng-model="vm.conta.email" required ng-minlength="6"
+                           ng-pattern='/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/' />
+                    <!--ng-blur="vm.validarLogin()"-->
+
+                    <span ng-show="formItem.Email.$error.required && formItem.Email.$touched" class="text-warning">O campo Login é obrigatório! </span>
+                    <span ng-show="formItem.Email.$error.minlength" class="text-warning">O campo Login deve ter ao menos 6 caracteres! </span>
+                    <span ng-show="formItem.Email.$error.pattern && formItem.Email.$touched" class="text-danger">Formato de E-mail é inválido! </span>
+                </div>
+
+                <!--<div class="col-md-6">
+                    <span ng-show="vm.validacao.verificandoLogin"><i class="fa fa-spinner fa-spin fa-sm"></i></span>
+                    <span class="{{(vm.validacao.loginValido ? 'text-success':'text-danger')}}">{{ vm.validacao.infoLogin }}</span>
+                </div>-->
+            </div>
+
+            <!--Senha -->
+            <div class="form-group" ng-class="{
+                            'has-warning': formItem.Password.$touched && formItem.Password.$error.required,
+                            'has-error': formItem.Password.$dirty && formItem.Password.$invalid && !vm.validarSenhas(),
+                            'has-success': formItem.Password.$dirty && !formItem.Password.$invalid && vm.validarSenhas() }">
+                <label for="Password" class="col-md-2 control-label">Senha: *</label>
+                <div class="col-md-4">
+                    <input type="password" class="form-control" id="Password" name="Password" ng-model="vm.conta.password" required ng-minlength="6">
+                    <span ng-show="formItem.Password.$error.required && formItem.Password.$touched" class="text-warning">O campo Senha é obrigatório! </span>
+                    <span ng-show="formItem.Password.$error.minlength" class="text-warning">O campo Senha deve ter ao menos 6 caracteres! </span>
+                </div>
+            </div>
+
+            <!--Confirmar Senha -->
+            <div class="form-group" ng-class="{
+                'has-warning': formItem.PasswordConfirm.$touched && formItem.PasswordConfirm.$error.required,
+                'has-error': formItem.PasswordConfirm.$dirty && formItem.PasswordConfirm.$invalid && !vm.validarSenhas(),
+                'has-success': formItem.PasswordConfirm.$dirty && !formItem.PasswordConfirm.$invalid && vm.validarSenhas() }">
+                <label for="PasswordConfirm" class="col-md-2 control-label">Confirmar Senha: *</label>
+                <div class="col-md-4">
+                    <input type="password" class="form-control" id="PasswordConfirm" name="PasswordConfirm" ng-model="vm.conta.passwordConfirm" required ng-minlength="6">
+                    <span ng-show="formItem.PasswordConfirm.$error.required && formItem.PasswordConfirm.$touched" class="text-warning">O campo Confirmação de Senha é obrigatório! </span>
+                    <span ng-show="formItem.PasswordConfirm.$error.minlength" class="text-warning">O campo Senha deve ter ao menos 6 caracteres! </span>
+                </div>
+                <div class="col-md-6">
+                    <span class="text-danger" ng-show="formItem.PasswordConfirm.$touched && !vm.validarSenhas()">Confirmação não corresponde a senha</span>
+                </div>
+            </div>
+
+            <!--Opções-->
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-8">
+
+                    <!--Salvar-->
+                    <input type="submit" value="Salvar" class="btn btn-primary"
+                           ng-disabled="formItem.$pristine || formItem.$invalid" />
+
+                    <!--Voltar-->
+                    <!--<a href="#!/" class="btn btn-default"><i class="fa fa-angle-left"></i> Voltar</a>-->
+
+                </div>
+            </div>
+
+        </div>
+    </form>
+
+</div>

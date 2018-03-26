@@ -1,0 +1,31 @@
+﻿@{
+    ViewData["Title"] = "Conta";
+}
+
+@section Scripts {
+
+    @* Scripts - Dev/Debug *@
+
+    @* AngularJS *@
+    <script src="~/lib/angular/angular.js"></script>
+    <script src="~/lib/angular-route/angular-route.js"></script>
+    <script src="~/lib/angular-ng-mask/dist/ngMask.js"></script>
+    <script src="~/lib/ngstorage/ngStorage.js"></script>
+
+    @* App *@
+    <script src="~/app/components/load-cursor/loadcursor.directive.js"></script>
+    <script src="~/app/app.js"></script>
+    <script src="~/app/services/auth.service.js"></script>
+    <script src="~/app/services/authInterceptor.service.js"></script>
+
+    <script src="~/app/modules/conta/module.js"></script>
+    <script src="~/app/modules/conta/controller.signup.js"></script>
+    <script src="~/app/modules/conta/controller.login.js"></script>
+}
+
+<div class="row" ng-app="ClientApp">
+
+    <div ng-view></div>
+
+</div>
+

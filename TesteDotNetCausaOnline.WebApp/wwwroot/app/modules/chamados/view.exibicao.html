@@ -1,0 +1,66 @@
+﻿
+<!--Header-->
+<div class="page-header">
+    <h3>Informações do Chamado</h3>
+</div>
+
+<div class="col-md-12">
+
+    <!--Info-->
+    <section id="Info" class="text-center">
+        <div class="well text-danger" ng-show="vm.errorMessage"><i class="fa fa-warning"></i> {{ vm.errorMessage }}</div>
+        <load-cursor ng-show="vm.isLoading"></load-cursor>
+    </section>
+
+    <!--Conteúdo-->
+    <section id="Conteudo" class="form-horizontal">
+
+        <!--Título-->
+        <div class="form-group">
+            <label for="Título" class="col-md-2 control-label">Título: </label>
+            <div class="col-md-10">
+                <span>{{vm.item.titulo}}</span>
+            </div>
+        </div>
+        <hr />
+
+        <!--Mensagem-->
+        <div class="form-group">
+            <label for="Mensagem" class="col-md-2 control-label">Mensagem: </label>
+            <div class="col-md-10">
+                <span>{{vm.item.mensagem}}</span>
+            </div>
+        </div>
+        <hr />
+
+        <!--Prioridade/Urgência-->
+        <div class="form-group">
+            <label for="Mensagem" class="col-md-2 control-label">Urgência: </label>
+            <div class="col-md-10">
+                <span>{{vm.item.prioridade.descricao}}</span>
+            </div>
+        </div>
+        <hr />
+
+        <!--Categoria-->
+        <div class="form-group">
+            <label for="Mensagem" class="col-md-2 control-label">Categoria: </label>
+            <div class="col-md-10">
+                <span>{{vm.item.categoria.descricao}}</span>
+            </div>
+        </div>
+        <hr />
+
+        <!--Opções-->
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-8">
+
+                <!--Voltar-->
+                <a href="#!/" class="btn btn-default"><i class="fa fa-angle-left"></i> Voltar</a>
+
+            </div>
+        </div>
+
+    </section>
+
+</div>

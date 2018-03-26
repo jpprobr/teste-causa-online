@@ -1,0 +1,50 @@
+﻿<div class="row">
+    <div class="col-md-12">
+
+        <!--Header-->
+        <div class="page-header">
+            <h3>Categorias</h3>
+        </div>
+
+        <!--Info-->
+        <section id="Info" class="text-center">
+            <div class="well text-danger" ng-show="vm.errorMessage"><i class="fa fa-warning"></i> {{ vm.errorMessage }}</div>
+            <load-cursor ng-show="vm.isLoading"></load-cursor>
+        </section>
+
+        <!--Tabela-->
+        <table class="table table-responsive table-striped">
+            <tr>
+                <th>Cod.</th>
+                <th>Descrição</th>
+                <th>Opções</th>
+            </tr>
+            <tr ng-repeat="item in vm.itens">
+                <td>{{ item.id }}</td>
+                <td>{{ item.descricao }}</td>
+                <td>
+                    <!--Editar-->
+                    <a ng-href="#!/editar/{{item.id}}" class="btn btn-sm btn-primary" data-loading-text="Aguarde..." title="Editar">
+                        <span class="glyphicon glyphicon-edit"></span>
+                    </a>
+
+                    <!--Excluir-->
+                    <button type="button" class="btn btn-sm btn-danger" ng-click="vm.excluir(item)" title="Excluir"
+                            data-loading-text="Aguarde...">
+                        <span class="glyphicon glyphicon-trash"></span>
+                    </button>
+                </td>
+            </tr>
+        </table>
+
+        <!--Opções-->
+        <section id="opcoes">
+            <p>
+                <!--Novo-->
+                <a ng-href="#!/cadastrar" class="btn btn-primary">
+                    <i class="fa fa-plus fa-lg"></i> Novo
+                </a>
+            </p>
+        </section>
+    </div>
+</div>

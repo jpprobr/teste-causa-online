@@ -5,7 +5,7 @@ using TesteDotNetCausaOnline.WebApp.Models;
 
 namespace TesteDotNetCausaOnline.WebApp.Data
 {
-    public class ApplicationDbContext : IdentityDbContext<AppUser>
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public DbSet<Chamado> Chamados { get; set; }
 
@@ -16,6 +16,7 @@ namespace TesteDotNetCausaOnline.WebApp.Data
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
+
         }
 
 

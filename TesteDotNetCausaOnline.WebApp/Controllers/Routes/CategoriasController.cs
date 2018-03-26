@@ -2,19 +2,24 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+
 using TesteDotNetCausaOnline.Domain.Models;
 using TesteDotNetCausaOnline.WebApp.Data;
 
+
 namespace TesteDotNetCausaOnline.WebApp.Controllers.Routes
 {
+    [Authorize("Bearer")]
     [Produces("application/json")]
-    [Route("api/Categorias")]
+    [Route("api/categorias")]
     public class CategoriasController : Controller
     {
         private readonly ApplicationDbContext _context;
+
 
         public CategoriasController(ApplicationDbContext context)
         {
@@ -22,15 +27,23 @@ namespace TesteDotNetCausaOnline.WebApp.Controllers.Routes
         }
 
 
-        // GET: api/Categorias
+        // GET: /api/categorias
+        /// <summary>
+        /// Busca categorias
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public IEnumerable<Categoria> GetCategorias()
         {
             return _context.Categorias;
         }
 
-
-        // GET: api/Categorias/5
+        // GET: /api/categorias/{id}
+        /// <summary>
+        /// Busca Categoria por Id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("{id}")]
         public async Task<IActionResult> GetCategoria([FromRoute] int id)
         {
@@ -49,7 +62,13 @@ namespace TesteDotNetCausaOnline.WebApp.Controllers.Routes
             return Ok(categoria);
         }
 
-        // PUT: api/Categorias/5
+        // PUT: /api/categorias/{id}
+        /// <summary>
+        /// Atualiza Categoria
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="categoria"></param>
+        /// <returns></returns>
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCategoria([FromRoute] int id, [FromBody] Categoria categoria)
         {
@@ -84,7 +103,12 @@ namespace TesteDotNetCausaOnline.WebApp.Controllers.Routes
             return NoContent();
         }
 
-        // POST: api/Categorias
+        // POST: /api/categorias
+        /// <summary>
+        /// Insere Categoria
+        /// </summary>
+        /// <param name="categoria"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> PostCategoria([FromBody] Categoria categoria)
         {
@@ -99,26 +123,43 @@ namespace TesteDotNetCausaOnline.WebApp.Controllers.Routes
             return CreatedAtAction("GetCategoria", new { id = categoria.Id }, categoria);
         }
 
-        // DELETE: api/Categorias/5
+        // DELETE: /api/categorias/{id}
+        /// <summary>
+        /// Excluir categoria
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCategoria([FromRoute] int id)
-        {
-            if (!ModelState.IsValid)
+        {            
+            try
             {
-                return BadRequest(ModelState);
-            }
+                if (!ModelState.IsValid)
+                    return BadRequest(ModelState);
 
-            var categoria = await _context.Categorias.SingleOrDefaultAsync(m => m.Id == id);
-            if (categoria == null)
+                var categoria = await _context.Categorias
+                                                .Include(c => c.Chamados)
+                                                .SingleOrDefaultAsync(m => m.Id == id);
+                if (categoria == null)
+                    return NotFound();
+
+                // Verifica se há chamados associados
+                if (categoria.Chamados != null && categoria.Chamados.Count > 0)
+                    throw new Exception("A categoria possui chamados associados e não pode ser removida no momento.");
+
+                _context.Categorias.Remove(categoria);
+                await _context.SaveChangesAsync();
+
+                return Ok(categoria);
+            }
+            catch (Exception exc)
             {
-                return NotFound();
+                var resp = new { info = "Não foi possível inserir a categoria.", exc };
+
+                return BadRequest(resp);
             }
-
-            _context.Categorias.Remove(categoria);
-            await _context.SaveChangesAsync();
-
-            return Ok(categoria);
         }
+
 
         private bool CategoriaExists(int id)
         {

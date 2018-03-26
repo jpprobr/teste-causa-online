@@ -8,6 +8,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Authorization;
 
 using TesteDotNetCausaOnline.WebApp.Data;
 using TesteDotNetCausaOnline.WebApp.Models;
@@ -20,8 +22,8 @@ namespace TesteDotNetCausaOnline.WebApp
     public class Startup
     {
         public IConfiguration Configuration { get; }
-        private const string SecretKey = "iNivDmHLpUA223sqsfhqGbMRdRj1JpSa"; // todo: mover p/ local seguro
-        private readonly SymmetricSecurityKey _signingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(SecretKey));
+        //private const string SecretKey = "iNivDmHLpUA223sqsfhqGbMRdRj1JpSa"; // todo: mover p/ local seguro
+        //private readonly SymmetricSecurityKey _signingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(SecretKey));
 
 
         public Startup(IConfiguration configuration)
@@ -32,15 +34,18 @@ namespace TesteDotNetCausaOnline.WebApp
 
         public void ConfigureServices(IServiceCollection services)
         {
+            // Add MVC
+            services.AddMvc();
+
             // Add DbContext
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
+            
             // Add Identity Structure
-            services.AddIdentity<AppUser, IdentityRole>()
+            services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
-
             services.Configure<IdentityOptions>(options =>
             {
                 // Password settings
@@ -59,75 +64,53 @@ namespace TesteDotNetCausaOnline.WebApp
                 // User settings
                 options.User.RequireUniqueEmail = true;
             });
-            
-            //services.AddSingleton<IJwtFactory, JwtFactory>();
-
-            /*
-            services.ConfigureApplicationCookie(options =>
-            {
-                // Cookie settings
-                options.Cookie.HttpOnly = true;
-                options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
-                // If the LoginPath isn't set, ASP.NET Core defaults 
-                // the path to /Account/Login.
-                options.LoginPath = "/Account/Login";
-                // If the AccessDeniedPath isn't set, ASP.NET Core defaults 
-                // the path to /Account/AccessDenied.
-                options.AccessDeniedPath = "/Account/AccessDenied";
-                options.SlidingExpiration = true;
-            });*/
-
+                    
             // Add Mail Sender
             services.AddTransient<IEmailSender, EmailSender>();
 
-            #region JWT Config
+            // Config Auth (Token)
 
-            // Get options from app settings
-            var jwtAppSettingOptions = Configuration.GetSection(nameof(JwtIssuerOptions));
+            // Adiciona configurações de Token
+            var signingConfigurations = new SigningConfigurations();
+            services.AddSingleton(signingConfigurations);
 
-            // Configure JwtIssuerOptions
-            services.Configure<JwtIssuerOptions>(options =>
+            var tokenConfigurations = new TokenConfigurations();
+            new ConfigureFromConfigurationOptions<TokenConfigurations>(Configuration.GetSection("TokenConfigurations"))
+                    .Configure(tokenConfigurations);
+            services.AddSingleton(tokenConfigurations);
+
+
+            // Adiciona serviço de Autenticação
+            services.AddAuthentication(authOptions =>
             {
-                options.Issuer = jwtAppSettingOptions[nameof(JwtIssuerOptions.Issuer)];
-                options.Audience = jwtAppSettingOptions[nameof(JwtIssuerOptions.Audience)];
-                options.SigningCredentials = new SigningCredentials(_signingKey, SecurityAlgorithms.HmacSha256);
+                authOptions.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                authOptions.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(bearerOptions =>
+            {
+                var paramsValidation = bearerOptions.TokenValidationParameters;
+                paramsValidation.IssuerSigningKey = signingConfigurations.Key;
+                paramsValidation.ValidAudience = tokenConfigurations.Audience;
+                paramsValidation.ValidIssuer = tokenConfigurations.Issuer;
+
+                // Valida a assinatura de um token recebido
+                paramsValidation.ValidateIssuerSigningKey = true;
+
+                // Verifica se um token recebido ainda é válido
+                paramsValidation.ValidateLifetime = true;
+
+                // Tempo de tolerância para a expiração de um token (utilizado caso haja problemas de sincronismo de horário entre diferentes computadores envolvidos no processo de comunicação)
+                paramsValidation.ClockSkew = TimeSpan.Zero;
             });
 
-            var tokenValidationParameters = new TokenValidationParameters
+
+            // Adiciona serviço de Autorização (Ativa o uso do token como forma de autorizar o acesso a recursos do projeto)
+            services.AddAuthorization(auth =>
             {
-                ValidateIssuer = true,
-                ValidIssuer = jwtAppSettingOptions[nameof(JwtIssuerOptions.Issuer)],
-
-                ValidateAudience = true,
-                ValidAudience = jwtAppSettingOptions[nameof(JwtIssuerOptions.Audience)],
-
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKey = _signingKey,
-
-                RequireExpirationTime = false,
-                ValidateLifetime = true,
-                ClockSkew = TimeSpan.Zero
-            };
-
-            services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-
-            }).AddJwtBearer(configureOptions =>
-            {
-                configureOptions.ClaimsIssuer = jwtAppSettingOptions[nameof(JwtIssuerOptions.Issuer)];
-                configureOptions.TokenValidationParameters = tokenValidationParameters;
-                configureOptions.SaveToken = true;
+                // Adiciona política de autorização
+                auth.AddPolicy("Bearer", new AuthorizationPolicyBuilder()
+                    .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
+                    .RequireAuthenticatedUser().Build());
             });
-
-            // api user claim policy
-            services.AddAuthorization(options =>
-            {
-                //options.AddPolicy("ApiUser", policy => policy.RequireClaim(Constants.Strings.JwtClaimIdentifiers.Rol, Constants.Strings.JwtClaims.ApiAccess));
-            });
-
-            #endregion
 
 
             // Add AutoMapper          
@@ -138,8 +121,7 @@ namespace TesteDotNetCausaOnline.WebApp
             var mapper = config.CreateMapper();
             services.AddSingleton(mapper);
 
-            // Add MVC
-            services.AddMvc();
+          
 
             // Add CORS
             services.AddCors();
@@ -166,6 +148,15 @@ namespace TesteDotNetCausaOnline.WebApp
                         .AllowAnyOrigin());*/
 
             app.UseStaticFiles();
+
+            /*
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+                Path.Combine(Directory.GetCurrentDirectory(), "MyStaticFiles")),
+                RequestPath = "/StaticFiles"
+            });
+            */
 
             app.UseAuthentication();
 

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using TesteDotNetCausaOnline.Domain.Models;
 using TesteDotNetCausaOnline.WebApp.Models;
 using TesteDotNetCausaOnline.WebApp.ViewModels;
 
@@ -10,7 +11,10 @@ namespace TesteDotNetCausaOnline.WebApp.Config
         public AutoMapperProfileConfig()
         {
             //CreateMap<RegisterViewModel, ApplicationUser>().ReverseMap();
-            CreateMap<CadastroUsuarioViewModel, AppUser>().ReverseMap();
+            CreateMap<CadastroUsuarioViewModel, ApplicationUser>().ReverseMap();
+            CreateMap<ChamadoViewModel, Chamado>().ReverseMap();
+            CreateMap<CategoriaViewModel, Categoria>().ReverseMap();
+
         }
     }
 }

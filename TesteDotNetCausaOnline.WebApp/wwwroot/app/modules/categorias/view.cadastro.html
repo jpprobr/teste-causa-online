@@ -1,0 +1,50 @@
+﻿
+<!--Header-->
+<div class="page-header">
+    <h3>{{vm.titulo}}<small> - {{vm.subtitulo}}</small></h3>
+</div>
+
+<div class="col-md-12">
+
+    <!--Info-->
+    <section id="Info" class="text-center">
+        <div class="well text-danger" ng-show="vm.errorMessage"><i class="fa fa-warning"></i> {{ vm.errorMessage }}</div>
+        <load-cursor ng-show="vm.isLoading"></load-cursor>
+    </section>
+
+    <!--Form-->
+    <form name="formItem" novalidate ng-submit="vm.salvar()">
+        <div class="form-horizontal">
+
+            <!--Descrição-->
+            <div class="form-group" ng-class="{
+                'has-warning': formItem.Descricao.$pristine && formItem.Descricao.$error.required,
+                'has-error': formItem.Descricao.$dirty && formItem.Descricao.$invalid,
+                'has-success': formItem.Descricao.$dirty && !formItem.Descricao.$invalid
+                }">
+                <label for="Descricao" class="col-md-2 control-label">Descrição: *</label>
+                <div class="col-md-10">
+                    <input type="text" class="form-control" id="Descricao" name="Descricao" ng-model="vm.item.descricao" required ng-minlength="3">
+                    <span ng-show="formItem.Descricao.$error.required && formItem.Descricao.$touched" class="text-warning">A Descrição é obrigatória</span>
+                    <span ng-show="formItem.Descricao.$error.minlength" class="text-warning">A Descrição deve ter ao menos 3 caracteres</span>
+                </div>
+            </div>
+          
+            <!--Opções-->
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-8">
+
+                    <!--Salvar-->
+                    <input type="submit" value="Salvar" class="btn btn-primary"
+                           ng-disabled="formItem.$pristine || formItem.$invalid" />
+
+                    <!--Voltar-->
+                    <a href="#!/" class="btn btn-default"><i class="fa fa-angle-left"></i> Voltar</a>
+
+                </div>
+            </div>
+
+        </div>
+    </form>
+
+</div>

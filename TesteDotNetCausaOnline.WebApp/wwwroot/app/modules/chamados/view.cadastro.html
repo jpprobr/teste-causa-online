@@ -1,0 +1,107 @@
+﻿
+<!--Header-->
+<div class="page-header">
+    <h3>{{vm.titulo}} - <small>{{vm.subtitulo}}</small></h3>
+</div>
+
+<div class="col-md-12">
+
+    <!--Info-->
+    <section id="Info" class="text-center">
+        <div class="well text-danger" ng-show="vm.errorMessage"><i class="fa fa-warning"></i> {{ vm.errorMessage }}</div>
+        <load-cursor ng-show="vm.isLoading"></load-cursor>
+    </section>
+
+    <!--Form-->
+    <form name="formItem" novalidate ng-submit="vm.salvar()">
+        <div class="form-horizontal">
+            <!--Título-->
+            <div class="form-group" ng-class="{
+                'has-warning': formItem.Titulo.$pristine && formItem.Titulo.$error.required,
+                'has-error': formItem.Titulo.$dirty && formItem.Titulo.$invalid,
+                'has-success': formItem.Titulo.$dirty && !formItem.Titulo.$invalid
+                }">
+                <label for="Descricao" class="col-md-2 control-label">Título: *</label>
+                <div class="col-md-10">
+                    <input type="text" class="form-control" id="Titulo" name="Titulo" ng-model="vm.item.titulo" required ng-minlength="3">
+                    <span ng-show="formItem.Descricao.$error.required && formItem.Descricao.$touched" class="text-warning">O campo Título é obrigatório</span>
+                    <span ng-show="formItem.Descricao.$error.minlength" class="text-warning">O campo Título deve ter ao menos 3 caracteres</span>
+                </div>
+            </div>
+
+            <!--Mensagem-->
+            <div class="form-group" ng-class="{
+                'has-warning': formItem.Mensagem.$pristine && formItem.Mensagem.$error.required,
+                'has-error': formItem.Mensagem.$dirty && formItem.Mensagem.$invalid,
+                'has-success': formItem.Mensagem.$dirty && !formItem.Mensagem.$invalid
+                }">
+                <label for="Descricao" class="col-md-2 control-label">Mensagem: *</label>
+                <div class="col-md-10">
+
+                    <textarea class="form-control" id="Mensagem" name="Mensagem" ng-model="vm.item.mensagem" required>
+                    </textarea>
+
+                    <span ng-show="formItem.Mensagem.$error.required && formItem.Mensagem.$touched" class="text-warning">O campo Mensagem é obrigatório</span>
+                </div>
+            </div>
+
+            <!--Prioridade-->
+            <div class="form-group">
+                <label for="Prioridade" class="col-md-2 control-label">Prioridade: *</label>
+                <div class="col-md-4">
+                    <select id="Prioridade" name="Prioridade" class="form-control"
+                            ng-model="vm.item.prioridade" ng-options="i as i.descricao for i in vm.prioridades track by i.id"></select>
+
+                    <span ng-show="(!vm.validarPrioridade())" class="text-warning">Selecione uma opção de Prioridade</span>
+                </div>
+                <div class="col-md-offset-6"></div>
+            </div>
+
+            <!--Categoria-->
+            <div class="form-group">
+                <label for="Categoria" class="col-md-2 control-label">Categoria: *</label>
+                <div class="col-md-4">
+                    <select id="Categoria" name="Categoria" class="form-control"
+                            ng-model="vm.item.categoria" ng-options="i as i.descricao for i in vm.categorias track by i.id"></select>
+
+                    <span ng-show="(!vm.validarCategoria())" class="text-warning">Selecione uma opção de Categoria</span>
+                </div>
+
+                <!--Adicionar-->
+                <div class="col-md-offset-6">
+                    <div class="form-inline">
+                        <button type="button" class="btn btn-default" ng-click="vm.exibirOpcaoNovaCategoria()">
+                            <i class="fa fa-plus"></i>
+                        </button>
+
+                        <span ng-show="vm.opcaoNovaCategoria">
+                            <input type="text" class="form-control" id="NovaCategoria" name="NovaCategoria" placeholder="Nova Categoria"
+                                   ng-model="vm.novaCategoria.descricao" ng-minlength="3">
+
+                            <button type="button" class="btn btn btn-success" ng-click="vm.adicionarCategoria(vm.novaCategoria)">
+                                <i class="fa fa-check"></i>
+                            </button>
+
+                            <span ng-show="!vm.validarNovaCategoria()" class="text-warning">{{vm.novaCategoria.alert}}</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!--Opções-->
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-8">
+
+                    <!--Salvar-->
+                    <input type="submit" value="Salvar" class="btn btn-primary"
+                           ng-disabled="formItem.$invalid || !vm.validar()" />
+
+                    <!--Voltar-->
+                    <a href="#!/" class="btn btn-default"><i class="fa fa-angle-left"></i> Voltar</a>
+
+                </div>
+            </div>
+
+        </div>
+    </form>
+</div>
