@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TesteDotNetCausaOnline.WebA
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TesteDotNetCausaOnline.Domain", "TesteDotNetCausaOnline.Domain\TesteDotNetCausaOnline.Domain.csproj", "{7A5C9780-E222-4443-A1B2-8A6D6EC3FBF8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TesteDotNetCausaOnline.WebApp.Client", "TesteDotNetCausaOnline.WebApp.Client\TesteDotNetCausaOnline.WebApp.Client.csproj", "{257E6293-BCD4-4D8B-8A10-FFD4F7643C1E}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TesteDotNetCausaOnline.Infra.Data", "TesteDotNetCausaOnline.Infra.Data\TesteDotNetCausaOnline.Infra.Data.csproj", "{906E01C2-2DAC-4F00-8653-C6CC2E4E2C6A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TesteDotNetCausaOnline.Domain.Services", "TesteDotNetCausaOnline.Domain.Services\TesteDotNetCausaOnline.Domain.Services.csproj", "{1D50ADFB-791F-42A6-8027-D7F56652F849}"
@@ -27,10 +25,6 @@ Global
 		{7A5C9780-E222-4443-A1B2-8A6D6EC3FBF8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7A5C9780-E222-4443-A1B2-8A6D6EC3FBF8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7A5C9780-E222-4443-A1B2-8A6D6EC3FBF8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{257E6293-BCD4-4D8B-8A10-FFD4F7643C1E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{257E6293-BCD4-4D8B-8A10-FFD4F7643C1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{257E6293-BCD4-4D8B-8A10-FFD4F7643C1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{257E6293-BCD4-4D8B-8A10-FFD4F7643C1E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{906E01C2-2DAC-4F00-8653-C6CC2E4E2C6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{906E01C2-2DAC-4F00-8653-C6CC2E4E2C6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{906E01C2-2DAC-4F00-8653-C6CC2E4E2C6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
