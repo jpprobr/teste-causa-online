@@ -10,6 +10,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Authorization;
+using Swashbuckle.AspNetCore.Swagger;
 
 using TesteDotNetCausaOnline.WebApp.Data;
 using TesteDotNetCausaOnline.WebApp.Models;
@@ -121,7 +122,16 @@ namespace TesteDotNetCausaOnline.WebApp
             var mapper = config.CreateMapper();
             services.AddSingleton(mapper);
 
-          
+            // Register the Swagger generator, defining one or more Swagger documents
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info
+                {
+                    Title = "TesteDotNet - CausaOnline - API",
+                    Version = "v1",
+                    Contact = new Contact { Name = "JP", Email = "jpsanet@gmail.com" }
+                });
+            });
 
             // Add CORS
             services.AddCors();
@@ -140,23 +150,18 @@ namespace TesteDotNetCausaOnline.WebApp
                 app.UseExceptionHandler("/Home/Error");
             }
 
-            // Use and show UseCors with CorsPolicyBuilder
-            /*app.UseCors(builder =>
-                //builder.WithOrigins("http://localhost"));
-                builder.AllowAnyHeader()
-                        .AllowAnyMethod()
-                        .AllowAnyOrigin());*/
-
             app.UseStaticFiles();
 
-            /*
-            app.UseStaticFiles(new StaticFileOptions
+
+            // Enable Swagger as a JSON endpoint.
+            app.UseSwagger();
+
+            // Enable middleware to serve swagger-ui specifying the Swagger JSON endpoint.
+            app.UseSwaggerUI(c =>
             {
-                FileProvider = new PhysicalFileProvider(
-                Path.Combine(Directory.GetCurrentDirectory(), "MyStaticFiles")),
-                RequestPath = "/StaticFiles"
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Sist. Gestão de Chamados API V1");
             });
-            */
+
 
             app.UseAuthentication();
 
