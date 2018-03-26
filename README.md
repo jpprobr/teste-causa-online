@@ -5,7 +5,7 @@
 
 ###Funcionalidades
  - Gestão / CRUD de Chamados 
-   - Opção de adicionar categoria enquanto cadastro o chamado
+   - Opção de adicionar categoria enquanto cadastra o chamado
  - Gestão / CRUD de Categorias de chamados
  - Autenticação/Autorização por API REST
  
@@ -16,6 +16,7 @@
  - CSS: Bootstrap, FontAwesome
  - Javascript: AngularJS, jQuery
  - Banco de Dados: SQL Server
+ - ORM: Entity Framework Core
  - Ferramentas auxiliares: Nuget, Bower
  - Ferramentas de autenticação/autorização: ASP.NET Identity Core, JSON Web Token (JWT)
  - Ferramentas auxiliares: Swagger (Documentação de API) => Acesso em: [url]/swagger
