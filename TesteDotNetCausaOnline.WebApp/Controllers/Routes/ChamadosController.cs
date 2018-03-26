@@ -106,6 +106,7 @@ namespace TesteDotNetCausaOnline.WebApp.Controllers.Routes
                     return BadRequest(ModelState);
                 }
 
+                // Prevenir ref. 
                 chamado.NumeroProcesso = 0;
                 chamado.IdCategoria = chamado.Categoria.Id;
                 chamado.Categoria = null;

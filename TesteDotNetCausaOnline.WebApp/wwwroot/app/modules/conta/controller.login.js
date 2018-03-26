@@ -56,7 +56,8 @@
 
                         alertify.success('Login efetuado com sucesso!');
                         vm.errorMessage = "";
-                        $location.path('/Home/Index');
+                        //$location.path('/Home/Index');
+                        window.location.replace('/');
                     }
                     else {
                         throw exc;

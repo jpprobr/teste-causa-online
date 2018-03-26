@@ -29,8 +29,8 @@
                 console.log('response = ' + response);
 
                 if (response.status === 401 || response.status === 403) {
-                    //$location.path('/Account#!/login');
-                    window.location = window.location.pathname + '/Account#!/login';
+
+                    window.location = '/Account#!/login';
                 }
 
                 return $q.reject(response);

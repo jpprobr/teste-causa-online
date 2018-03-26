@@ -2,7 +2,7 @@
 (function () {
     'use strict';
     
-    angular.module("ClientApp", ["ngRoute", "UtilControls", "ngStorage"])
+    angular.module("ClientApp")
       .config(function ($routeProvider) {
           $routeProvider
             .when('/', {
